@@ -4,7 +4,7 @@ Potent PowerShell is a collection of PowerShell scripts for Windows system admin
 ## Scripts
 The repository contains the following scripts:
 - **7dayerroreval.ps1**: evaluates the past 7 days of Windows event logs for patterns of errors and reports on outliers.
-- **calc_pi.ps1**: calculates digits of pi using the Nilakantha series formula.
+- **calc_pi.ps1**: calculates digits of pi using the Leibniz series formula.
 - **chkdsk.ps1**: runs the Windows chkdsk command on all drives.
 - **cli_configure.ps1**: sets up AWS CLI credentials.
 - **discord_webhook.ps1**: sends a message to a Discord webhook.
