@@ -21,7 +21,7 @@ $StartTime = (Get-Date).AddDays(-7)
 $EndTime = Get-Date
 
 # Search for error events in the Windows event logs
-$Events = Get-WinEvent -FilterHashtable @{LogName='Application','System';Level=2;StartTime=$StartTime;EndTime=$EndTime}
+$Events = Get-WinEvent -FilterHashtable @{LogName = 'Application', 'System'; Level = 2; StartTime = $StartTime; EndTime = $EndTime }
 
 # Group the events by source and count the occurrences
 $EventGroups = $Events | Group-Object -Property Source

@@ -22,26 +22,26 @@
 #>
 
 # Check for saved access and secret keys
-if ((Test-Path $env:USERPROFILE\.aws\credentials) -and (Select-String -Path $env:USERPROFILE\.aws\credentials -Pattern "aws_access_key_id")) {
-    Write-Host "Saved AWS credentials found."
-    $useSaved = Read-Host "Would you like to use the saved credentials? (Y/N)"
-    if ($useSaved -eq "Y") {
-        Write-Host "Using saved credentials."
-        $accessKey = Select-String -Path $env:USERPROFILE\.aws\credentials -Pattern "aws_access_key_id\s*=\s*(\S+)" | ForEach-Object { $_.Matches[0].Groups[1].Value }
-        $secretKey = Select-String -Path $env:USERPROFILE\.aws\credentials -Pattern "aws_secret_access_key\s*=\s*(\S+)" | ForEach-Object { $_.Matches[0].Groups[1].Value }
+if ((Test-Path $env:USERPROFILE\.aws\credentials) -and (Select-String -Path $env:USERPROFILE\.aws\credentials -Pattern 'aws_access_key_id')) {
+    Write-Host 'Saved AWS credentials found.'
+    $useSaved = Read-Host 'Would you like to use the saved credentials? (Y/N)'
+    if ($useSaved -eq 'Y') {
+        Write-Host 'Using saved credentials.'
+        $accessKey = Select-String -Path $env:USERPROFILE\.aws\credentials -Pattern 'aws_access_key_id\s*=\s*(\S+)' | ForEach-Object { $_.Matches[0].Groups[1].Value }
+        $secretKey = Select-String -Path $env:USERPROFILE\.aws\credentials -Pattern 'aws_secret_access_key\s*=\s*(\S+)' | ForEach-Object { $_.Matches[0].Groups[1].Value }
     }
     else {
-        $accessKey = Read-Host "Enter your AWS access key:"
-        $secretKey = Read-Host "Enter your AWS secret key:"
+        $accessKey = Read-Host 'Enter your AWS access key:'
+        $secretKey = Read-Host 'Enter your AWS secret key:'
     }
 }
 else {
-    $accessKey = Read-Host "Enter your AWS access key:"
-    $secretKey = Read-Host "Enter your AWS secret key:"
+    $accessKey = Read-Host 'Enter your AWS access key:'
+    $secretKey = Read-Host 'Enter your AWS secret key:'
 }
 
 # Install Chocolatey if not already installed
-if (!(Test-Path "C:\ProgramData\chocolatey\choco.exe")) {
+if (!(Test-Path 'C:\ProgramData\chocolatey\choco.exe')) {
     Set-ExecutionPolicy Bypass -Scope Process -Force
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
@@ -55,22 +55,22 @@ aws configure set aws_secret_access_key $secretKey
 
 # Determine closest AWS region
 $regions = (aws ec2 describe-regions --query Regions[*].RegionName --output text).Split()
-$regionList = ""
-for ($i=0; $i -lt $regions.Length; $i++) {
+$regionList = ''
+for ($i = 0; $i -lt $regions.Length; $i++) {
     $regionList += "`n$($i+1): $($regions[$i])"
 }
 $regionChoice = Read-Host "Select the closest AWS region:`n$regionList"
-$region = $regions[$regionChoice-1]
+$region = $regions[$regionChoice - 1]
 
 # Configure default region for AWS CLI
 aws configure set default.region $region
 
 # Test AWS configuration
-Write-Host "Testing AWS configuration..."
+Write-Host 'Testing AWS configuration...'
 aws s3 ls > $null
 if ($LastExitCode -eq 0) {
-    Write-Host "AWS CLI and AWS Tools for PowerShell have been successfully configured."
+    Write-Host 'AWS CLI and AWS Tools for PowerShell have been successfully configured.'
 }
 else {
-    Write-Host "There was an error configuring AWS. Please check your access key, secret key, and region settings and try again."
+    Write-Host 'There was an error configuring AWS. Please check your access key, secret key, and region settings and try again.'
 }
