@@ -1,3 +1,26 @@
+<#
+.SYNOPSIS
+  Configures the AWS CLI with a new profile.
+
+.DESCRIPTION
+  This script configures the AWS CLI with a new profile by prompting the user for the profile name, access key, and secret key.
+  The profile will be stored in the credentials file located in the user's home directory.
+
+.PARAMETER None
+  This script does not take any parameters.
+
+.EXAMPLE
+  PS> .\cli_configure.ps1
+  Configures the AWS CLI with a new profile.
+
+.NOTES
+  This script requires the AWS CLI to be installed on the system. The script prompts the user to enter the following information for the new profile:
+  * Profile name
+  * Access key
+  * Secret key
+  The profile is then added to the credentials file located in the user's home directory. If the credentials file does not exist, it will be created.
+#>
+
 # Check for saved access and secret keys
 if ((Test-Path $env:USERPROFILE\.aws\credentials) -and (Select-String -Path $env:USERPROFILE\.aws\credentials -Pattern "aws_access_key_id")) {
     Write-Host "Saved AWS credentials found."
