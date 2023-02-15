@@ -12,8 +12,9 @@ The repository contains the following scripts:
 - **python_upgrade_clear.ps1**: upgrades Python and clears out virtual environments.
 - **steam_verify.ps1**: forces Steam to verify all files for the base installation and all installed games.
 Each script comes with a commented help section, describing what it does, how to use it, and any caveats to keep in mind.
+
 > Potent PowerShell
-Peering through the portal of PowerShell,  
+>Peering through the portal of PowerShell,  
 Perched a repository, most powerful.  
 Packed with scripts of all shapes and sizes,  
 Poised to pounce on your admin crises.
