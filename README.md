@@ -1,4 +1,4 @@
-# PotentPowershell
+# Potent Powershell
 Peering through the portal of PowerShell,  
 Perched a repository, most powerful.  
 Packed with scripts of all shapes and sizes,  
