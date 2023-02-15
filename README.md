@@ -3,18 +3,19 @@
 Potent PowerShell is a collection of PowerShell scripts for Windows system administration and development tasks. Each script is designed to be useful on its own or as a building block for larger projects.
 ## Scripts
 The repository contains the following scripts:
+
 - **7dayerroreval.ps1**: evaluates the past 7 days of Windows event logs for patterns of errors and reports on outliers.
-- **calc_pi.ps1**: calculates digits of pi using the Leibniz series formula.
+- **calc_pi.ps1**: calculates digits of pi using the Nilakantha series formula.
 - **chkdsk.ps1**: runs the Windows chkdsk command on all drives.
+- **chocolatey_late_adoption.ps1**: installs Chocolatey and attempts to adopt all locally installed software.
 - **cli_configure.ps1**: sets up AWS CLI credentials.
-- **discord_webhook.ps1**: sends a message to a Discord webhook.
 - **powershell_force_admin.ps1**: forces a PowerShell script to run with administrative privileges.
 - **python_upgrade_clear.ps1**: upgrades Python and clears out virtual environments.
 - **steam_verify.ps1**: forces Steam to verify all files for the base installation and all installed games.
 Each script comes with a commented help section, describing what it does, how to use it, and any caveats to keep in mind.
 
 > Potent PowerShell
->Peering through the portal of PowerShell,  
+Peering through the portal of PowerShell,  
 Perched a repository, most powerful.  
 Packed with scripts of all shapes and sizes,  
 Poised to pounce on your admin crises.
