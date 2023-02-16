@@ -1,5 +1,30 @@
-# STEP 1: Install the AWS CLI and configure it with your access keys
-Set-AWSCredential -AccessKey ACCESS_KEY_HERE -SecretKey SECRET_KEY_HERE -StoreAs default
+# STEP 1: Configure AWS CLI with your access keys
+# Check if AWS credentials exist
+$existingCredentials = Get-AWSCredential -ListProfileDetail
+
+if ($existingCredentials -ne $null) {
+    # Prompt the user to use existing credentials or enter new ones
+    Write-Host "Existing AWS credentials found:`n"
+    Write-Host "Access key ID: $($existingCredentials[0].AccessKey)"
+    Write-Host "Secret access key: $($existingCredentials[0].SecretKey)`n"
+    $useExistingCredentials = Read-Host "Do you want to use the existing AWS credentials? (y/n)"
+
+    if ($useExistingCredentials -eq "y") {
+        # Use existing credentials
+        $existingProfile = Read-Host "Enter the name of the AWS profile to use (e.g. default)"
+        Set-AWSCredential -ProfileName $existingProfile
+    }
+}
+
+if ($existingCredentials -eq $null -or $useExistingCredentials -eq "n") {
+    # Query the user for new AWS credentials
+    $accessKey = Read-Host "Enter your AWS access key ID"
+    $secretKey = Read-Host "Enter your AWS secret access key"
+    $profileName = Read-Host "Enter the name of the AWS profile to use (e.g. default)"
+
+    # Save the credentials as the default for future use
+    Set-AWSCredential -AccessKey $accessKey -SecretKey $secretKey -ProfileName $profileName
+}
 
 # STEP 2: Enable MFA on your root account
 # This step cannot be automated since it requires a physical MFA device
@@ -21,7 +46,7 @@ Add-IAMUserToGroup -UserName $iamUserName -GroupName $iamGroupName | Out-Null
 # This step requires you to create a JSON policy document that specifies the permissions
 # that you want to grant to the IAM user
 $policyName = "IAM_POLICY_NAME_HERE"
-$policyDocument = Get-Content "PATH_TO_JSON_POLICY_DOCUMENT"
+$policyDocument = Get-Content "PATH_TO_JSON_POLICY_DOCUMENT" # or "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess" to use AWS-managed policies
 
 New-IAMPolicy -PolicyName $policyName -PolicyDocument $policyDocument | Out-Null
 
