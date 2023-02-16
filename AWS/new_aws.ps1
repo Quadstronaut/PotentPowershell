@@ -57,7 +57,48 @@ Attach-IAMPolicyToGroup -PolicyArn "arn:aws:iam::ACCOUNT_ID_HERE:policy/$policyN
 New-IAMAccessKey -UserName $iamUserName | Out-Null
 
 # STEP 4: Set up a billing alarm
-# This step cannot be automated since it requires manual configuration in the AWS Management Console
+# Create a budget for monthly spending
+$budgetName = "Monthly-Budget"
+$budgetDescription = "Monthly budget for AWS spending"
+$budgetAmount = 50
+
+# Set the budget period to monthly
+$budgetTimeUnit = "MONTHLY"
+
+# Set the filters to include all services and regions
+$filters = @(
+    @{
+        Name = "SERVICE";
+        Values = "*";
+    },
+    @{
+        Name = "REGION";
+        Values = "*";
+    }
+)
+
+# Create the cost budget
+New-Budget -BudgetName $budgetName -BudgetType COST -BudgetLimit $budgetAmount -TimeUnit $budgetTimeUnit -BudgetFilter $filters -BudgetDescription $budgetDescription
+
+# Set up an alert for when the budget exceeds 80% of the limit
+$alertName1 = "Monthly-Spending-80%-Alert"
+$alertThreshold1 = 80
+$alertThresholdType1 = "PERCENTAGE"
+$alertTrigger1 = "ACTUAL"
+$alertType1 = "FORECASTED"
+$alertNotification1 = "arn:aws:sns:us-east-1:1234567890:my-sns-topic"
+
+New-BudgetAction -ActionName $alertName1 -NotificationType ACTUAL -Threshold $alertThreshold1 -ThresholdType $alertThresholdType1 -ActionType $alertType1 -Notification $alertNotification1
+
+# Set up an alert for when the budget exceeds 100% of the limit
+$alertName2 = "Monthly-Spending-100%-Alert"
+$alertThreshold2 = 100
+$alertThresholdType2 = "PERCENTAGE"
+$alertTrigger2 = "ACTUAL"
+$alertType2 = "ACTUAL"
+$alertNotification2 = "arn:aws:sns:us-east-1:1234567890:my-sns-topic"
+
+New-BudgetAction -ActionName $alertName2 -NotificationType ACTUAL -Threshold $alertThreshold2 -ThresholdType $alertThresholdType2 -ActionType $alertType2 -Notification $alertNotification2
 
 # STEP 5: Create a Virtual Private Cloud (VPC)
 # This step requires you to define the VPC configuration parameters and execute them with Terraform
