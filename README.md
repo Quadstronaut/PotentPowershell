@@ -1,19 +1,6 @@
 
 # Potent PowerShell
 Potent PowerShell is a collection of PowerShell scripts for Windows system administration and development tasks. Each script is designed to be useful on its own or as a building block for larger projects.
-## Scripts
-The repository contains the following scripts:
-
-- **[7dayerroreval.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/Windows/7dayerroreval.ps1)**: evaluates the past 7 days of Windows event logs for patterns of errors and reports on outliers.
-- **[calc_pi.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/Fun/calc_pi.ps1)**: calculates digits of pi using the Nilakantha series formula.
-- **[chkdsk.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/Windows/chkdsk.ps1)**: runs the Windows chkdsk command on all drives.
-- **[chocolatey_late_adoption.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/Windows/chocolatey_late_adoption.ps1)**: installs Chocolatey and attempts to adopt all locally installed software.
-- **[cli_configure.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/AWS/cli_configure.ps1)**: sets up AWS CLI credentials.
-- **[powershell_force_admin.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/Windows/powershell_force_admin.ps1)**: forces a PowerShell script to run with administrative privileges.
-- **[python_upgrade_clear.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/Windows/python_upgrade_clear.ps1)**: upgrades Python and clears out virtual environments.
-- **[steam-forced_verify.ps1](https://github.com/GitKageHub/PotentPowershell/blob/master/Gaming/steam-forced-verification.ps1)**: forces Steam to verify all files for the base installation and all installed games.
-Each script comes with a commented help section, describing what it does, how to use it, and any caveats to keep in mind.
-
 > Peering through the portal of PowerShell,  
 Perched a repository, most powerful.  
 Packed with scripts of all shapes and sizes,  
