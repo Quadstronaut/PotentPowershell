@@ -25,15 +25,15 @@
 
 # Check if the script is running with administrative privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Host 'This script must be run with administrative privileges.'
-    Exit 1
+  Write-Host 'This script must be run with administrative privileges.'
+  Exit 1
 }
   
 # Check if Chocolatey is installed and install it if it is not
 if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-    Write-Host 'Chocolatey is not installed. Attempting to install Chocolatey...'
-    Set-ExecutionPolicy Bypass -Scope Process -Force
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+  Write-Host 'Chocolatey is not installed. Attempting to install Chocolatey...'
+  Set-ExecutionPolicy Bypass -Scope Process -Force
+  Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 }
   
 # Run SFC and DISM commands in parallel and fork them to the background
@@ -42,8 +42,8 @@ Start-Process -FilePath 'powershell.exe' -ArgumentList '-Command dism /Online /C
   
 # Query Chocolatey for installed packages and versions
 if (Get-Command choco -ErrorAction SilentlyContinue) {
-    $chocoInfo = choco list --local-only
-    $chocoInfo | Out-File "$HOME\Documents\Chocolatey.txt"
+  $chocoInfo = choco list --local-only
+  $chocoInfo | Out-File "$HOME\Documents\Chocolatey.txt"
 }
   
 # Upgrade all installed packages using Chocolatey
@@ -51,8 +51,8 @@ choco upgrade all -y
   
 # Check if pip is installed and upgrade it if it is
 if (Get-Command pip -ErrorAction SilentlyContinue) {
-    Write-Host 'Upgrading pip...'
-    pip install --upgrade pip
+  Write-Host 'Upgrading pip...'
+  pip install --upgrade pip
 }
   
 # Download and install all available Windows updates but do not reboot
@@ -61,12 +61,13 @@ $session = New-Object -ComObject Microsoft.Update.Session
 $updater = $session.CreateUpdateInstaller()
 $updates = $session.CreateUpdateSearcher().Search('IsInstalled=0')
 $updates | ForEach-Object {
-    $updater.AddUpdate($_)
+  $updater.AddUpdate($_)
 }
 $result = $updater.Install()
 if ($result.ResultCode -eq 2) {
-    Write-Host 'There are no updates available.'
+  Write-Host 'There are no updates available.'
 }
 elseif ($result.ResultCode -eq 3) {
-    Write-Host 'Updates were downloaded and installed successfully.'
-    Write-Host 'A reboot may be required, but one has not been forced.'
+  Write-Host 'Updates were downloaded and installed successfully.'
+  Write-Host 'A reboot may be required, but one has not been forced.'
+}

@@ -29,8 +29,8 @@ $sum = 0
 
 # Loop through the iterations and calculate the sum
 for ($i = 0; $i -lt $iterations; $i++) {
-    $term = [Math]::Pow(-1, $i) / (2 * $i + 1)
-    $sum += $term
+  $term = [Math]::Pow(-1, $i) / (2 * $i + 1)
+  $sum += $term
 }
 
 # Multiply the sum by 4 to get an approximation of pi

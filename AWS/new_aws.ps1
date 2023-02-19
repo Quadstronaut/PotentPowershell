@@ -7,20 +7,20 @@ if ($existingCredentials -ne $null) {
     Write-Host "Existing AWS credentials found:`n"
     Write-Host "Access key ID: $($existingCredentials[0].AccessKey)"
     Write-Host "Secret access key: $($existingCredentials[0].SecretKey)`n"
-    $useExistingCredentials = Read-Host "Do you want to use the existing AWS credentials? (y/n)"
+    $useExistingCredentials = Read-Host 'Do you want to use the existing AWS credentials? (y/n)'
 
-    if ($useExistingCredentials -eq "y") {
+    if ($useExistingCredentials -eq 'y') {
         # Use existing credentials
-        $existingProfile = Read-Host "Enter the name of the AWS profile to use (e.g. default)"
+        $existingProfile = Read-Host 'Enter the name of the AWS profile to use (e.g. default)'
         Set-AWSCredential -ProfileName $existingProfile
     }
 }
 
-if ($existingCredentials -eq $null -or $useExistingCredentials -eq "n") {
+if ($existingCredentials -eq $null -or $useExistingCredentials -eq 'n') {
     # Query the user for new AWS credentials
-    $accessKey = Read-Host "Enter your AWS access key ID"
-    $secretKey = Read-Host "Enter your AWS secret access key"
-    $profileName = Read-Host "Enter the name of the AWS profile to use (e.g. default)"
+    $accessKey = Read-Host 'Enter your AWS access key ID'
+    $secretKey = Read-Host 'Enter your AWS secret access key'
+    $profileName = Read-Host 'Enter the name of the AWS profile to use (e.g. default)'
 
     # Save the credentials as the default for future use
     Set-AWSCredential -AccessKey $accessKey -SecretKey $secretKey -ProfileName $profileName
@@ -30,8 +30,8 @@ if ($existingCredentials -eq $null -or $useExistingCredentials -eq "n") {
 # This step cannot be automated since it requires a physical MFA device
 
 # STEP 3: Create an IAM user with limited permissions and grant it access keys
-$iamUserName = "IAM_USER_NAME_HERE"
-$iamGroupName = "IAM_GROUP_NAME_HERE"
+$iamUserName = 'IAM_USER_NAME_HERE'
+$iamGroupName = 'IAM_GROUP_NAME_HERE'
 
 # Create the IAM user
 New-IAMUser -UserName $iamUserName | Out-Null
@@ -45,8 +45,8 @@ Add-IAMUserToGroup -UserName $iamUserName -GroupName $iamGroupName | Out-Null
 # Create a policy that grants the IAM user the required permissions
 # This step requires you to create a JSON policy document that specifies the permissions
 # that you want to grant to the IAM user
-$policyName = "IAM_POLICY_NAME_HERE"
-$policyDocument = Get-Content "PATH_TO_JSON_POLICY_DOCUMENT" # or "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess" to use AWS-managed policies
+$policyName = 'IAM_POLICY_NAME_HERE'
+$policyDocument = Get-Content 'PATH_TO_JSON_POLICY_DOCUMENT' # or "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess" to use AWS-managed policies
 
 New-IAMPolicy -PolicyName $policyName -PolicyDocument $policyDocument | Out-Null
 
@@ -58,22 +58,22 @@ New-IAMAccessKey -UserName $iamUserName | Out-Null
 
 # STEP 4: Set up a billing alarm
 # Create a budget for monthly spending
-$budgetName = "Monthly-Budget"
-$budgetDescription = "Monthly budget for AWS spending"
+$budgetName = 'Monthly-Budget'
+$budgetDescription = 'Monthly budget for AWS spending'
 $budgetAmount = 50
 
 # Set the budget period to monthly
-$budgetTimeUnit = "MONTHLY"
+$budgetTimeUnit = 'MONTHLY'
 
 # Set the filters to include all services and regions
 $filters = @(
     @{
-        Name = "SERVICE";
-        Values = "*";
+        Name   = 'SERVICE';
+        Values = '*';
     },
     @{
-        Name = "REGION";
-        Values = "*";
+        Name   = 'REGION';
+        Values = '*';
     }
 )
 
@@ -81,22 +81,22 @@ $filters = @(
 New-Budget -BudgetName $budgetName -BudgetType COST -BudgetLimit $budgetAmount -TimeUnit $budgetTimeUnit -BudgetFilter $filters -BudgetDescription $budgetDescription
 
 # Set up an alert for when the budget exceeds 80% of the limit
-$alertName1 = "Monthly-Spending-80%-Alert"
+$alertName1 = 'Monthly-Spending-80%-Alert'
 $alertThreshold1 = 80
-$alertThresholdType1 = "PERCENTAGE"
-$alertTrigger1 = "ACTUAL"
-$alertType1 = "FORECASTED"
-$alertNotification1 = "arn:aws:sns:us-east-1:1234567890:my-sns-topic"
+$alertThresholdType1 = 'PERCENTAGE'
+$alertTrigger1 = 'ACTUAL'
+$alertType1 = 'FORECASTED'
+$alertNotification1 = 'arn:aws:sns:us-east-1:1234567890:my-sns-topic'
 
 New-BudgetAction -ActionName $alertName1 -NotificationType ACTUAL -Threshold $alertThreshold1 -ThresholdType $alertThresholdType1 -ActionType $alertType1 -Notification $alertNotification1
 
 # Set up an alert for when the budget exceeds 100% of the limit
-$alertName2 = "Monthly-Spending-100%-Alert"
+$alertName2 = 'Monthly-Spending-100%-Alert'
 $alertThreshold2 = 100
-$alertThresholdType2 = "PERCENTAGE"
-$alertTrigger2 = "ACTUAL"
-$alertType2 = "ACTUAL"
-$alertNotification2 = "arn:aws:sns:us-east-1:1234567890:my-sns-topic"
+$alertThresholdType2 = 'PERCENTAGE'
+$alertTrigger2 = 'ACTUAL'
+$alertType2 = 'ACTUAL'
+$alertNotification2 = 'arn:aws:sns:us-east-1:1234567890:my-sns-topic'
 
 New-BudgetAction -ActionName $alertName2 -NotificationType ACTUAL -Threshold $alertThreshold2 -ThresholdType $alertThresholdType2 -ActionType $alertType2 -Notification $alertNotification2
 
@@ -126,31 +126,31 @@ New-EC2Address | Out-Null
 # STEP 10: Set up CloudTrail
 # This step requires you to create a CloudTrail trail and specify the S3 bucket where the trail logs will be stored
 # This can be achieved with the following PowerShell command:
-New-CloudTrail -Name "CLOUDTRAIL_NAME_HERE" -S3BucketName "S3_BUCKET_NAME_HERE" | Out-Null
+New-CloudTrail -Name 'CLOUDTRAIL_NAME_HERE' -S3BucketName 'S3_BUCKET_NAME_HERE' | Out-Null
 
 # STEP 11: Set
 # 11. Create a new user account with administrative permissions and disable root access
-$adminUsername = "<your_admin_username>"
+$adminUsername = '<your_admin_username>'
 $user = Get-IAMUser -UserName $adminUsername
 if (!$user) {
     New-IAMUser -UserName $adminUsername
 }
-Add-IAMUserToGroup -UserName $adminUsername -GroupName "Administrators"
+Add-IAMUserToGroup -UserName $adminUsername -GroupName 'Administrators'
 Disable-RootSSHAccess
 
 # 12. Configure AWS SSO and enable SSO access for the admin account
 Install-Module -Name AWSPowerShellSSO -Force
 Import-Module -Name AWSPowerShellSSO
 Initialize-AWSSSO
-$accountId = "<your_aws_account_id>"
-$awsSsoRole = "AWSReservedSSO_AdministratorAccess_<your_aws_sso_instance_name>"
-$awsSsoStartUrl = "https://<your_aws_sso_instance_id>.awsapps.com/start"
-Add-AWSSSORoleToProfile -ProfileName "default" -RoleName $awsSsoRole -AccountId $accountId -StartUrl $awsSsoStartUrl
+$accountId = '<your_aws_account_id>'
+$awsSsoRole = 'AWSReservedSSO_AdministratorAccess_<your_aws_sso_instance_name>'
+$awsSsoStartUrl = 'https://<your_aws_sso_instance_id>.awsapps.com/start'
+Add-AWSSSORoleToProfile -ProfileName 'default' -RoleName $awsSsoRole -AccountId $accountId -StartUrl $awsSsoStartUrl
 
 # 13. Configure multi-factor authentication (MFA) for the admin account
-$serialNumber = "<your_mfa_serial_number>"
-$accountAlias = "<your_aws_account_alias>"
+$serialNumber = '<your_mfa_serial_number>'
+$accountAlias = '<your_aws_account_alias>'
 Enable-IAMMFA -UserName $adminUsername -SerialNumber $serialNumber
-$otp = Read-Host "Please enter the current MFA token"
-$profileName = "default"
+$otp = Read-Host 'Please enter the current MFA token'
+$profileName = 'default'
 Test-IAMMFA -ProfileName $profileName -OTPCode $otp

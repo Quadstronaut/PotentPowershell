@@ -28,13 +28,13 @@ $EventGroups = $Events | Group-Object -Property Source
 
 # Loop through each event source
 foreach ($Group in $EventGroups) {
-    # Count the number of events in this group
-    $EventCount = $Group.Count
+  # Count the number of events in this group
+  $EventCount = $Group.Count
     
-    # If there are more than 10 events in this group, it may be considered an unusual problem
-    if ($EventCount -gt 10) {
-        Write-Host "The following events from source $($Group.Name) occurred $($EventCount) times in the past 7 days:"
-        # Display the 10 most recent events from this group
-        $Group.Group | Select-Object -First 10 | Format-List | Out-String | Write-Host
-    }
+  # If there are more than 10 events in this group, it may be considered an unusual problem
+  if ($EventCount -gt 10) {
+    Write-Host "The following events from source $($Group.Name) occurred $($EventCount) times in the past 7 days:"
+    # Display the 10 most recent events from this group
+    $Group.Group | Select-Object -First 10 | Format-List | Out-String | Write-Host
+  }
 }

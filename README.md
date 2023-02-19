@@ -1,4 +1,3 @@
-
 # Potent PowerShell
 Potent PowerShell is a collection of PowerShell scripts for Windows system administration and development tasks. Each script is designed to be useful on its own or as a building block for larger projects.
 > Peering through the portal of PowerShell,  

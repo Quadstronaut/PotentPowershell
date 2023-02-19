@@ -21,8 +21,8 @@ $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIde
 
 # If not, re-run the script with elevated privileges
 if (-not $isAdmin) {
-    Start-Process powershell.exe -Verb runAs "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
-    exit
+  Start-Process powershell.exe -Verb runAs "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`""
+  exit
 }
 
 # Set the execution policy to unrestricted
@@ -31,7 +31,7 @@ Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 # Add the PowerShell profile if it doesn't exist
 $profilePath = "$env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
 if (!(Test-Path $profilePath)) {
-    New-Item -ItemType File -Path $profilePath
+  New-Item -ItemType File -Path $profilePath
 }
 
 # Add the code to run PowerShell windows with administrative privileges to the profile

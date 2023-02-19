@@ -18,8 +18,8 @@
 
 # Ensure that the script is running with administrator privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Warning 'Please run this script as an administrator.'
-    exit
+  Write-Warning 'Please run this script as an administrator.'
+  exit
 }
 
 # Find the location of the Steam executable
@@ -27,8 +27,8 @@ $steam = (Get-ItemProperty 'HKCU:\Software\Valve\Steam').SteamExe
 
 # Check if Steam is running
 if (Get-Process -Name 'Steam' -ErrorAction SilentlyContinue) {
-    Write-Warning 'Steam is running. Please exit Steam and try again.'
-    exit
+  Write-Warning 'Steam is running. Please exit Steam and try again.'
+  exit
 }
 
 # Verify the base installation
@@ -39,19 +39,19 @@ $steamapps = Join-Path (Split-Path $steam -Parent) 'steamapps'
 
 # Verify the files for all installed games
 if (Test-Path $steamapps) {
-    Get-ChildItem $steamapps -Directory | ForEach-Object {
-        $game = $_.Name
-        $appmanifest = Join-Path $_.FullName "$game.appmanifest"
-        if (Test-Path $appmanifest) {
-            $appid = Get-Content $appmanifest | Select-String -Pattern '"appid"\s*"\d+"' | ForEach-Object {
-                $_ -replace '.*"appid"\s*"?(\d+)".*', '$1'
-            }
-            if ($appid) {
-                Write-Host "Verifying files for $game (AppID: $appid)..."
-                Start-Process -FilePath $steam -ArgumentList "-applaunch $appid -verify_all" -Wait
-            }
-        }
+  Get-ChildItem $steamapps -Directory | ForEach-Object {
+    $game = $_.Name
+    $appmanifest = Join-Path $_.FullName "$game.appmanifest"
+    if (Test-Path $appmanifest) {
+      $appid = Get-Content $appmanifest | Select-String -Pattern '"appid"\s*"\d+"' | ForEach-Object {
+        $_ -replace '.*"appid"\s*"?(\d+)".*', '$1'
+      }
+      if ($appid) {
+        Write-Host "Verifying files for $game (AppID: $appid)..."
+        Start-Process -FilePath $steam -ArgumentList "-applaunch $appid -verify_all" -Wait
+      }
     }
+  }
 }
 
 # Output a message to indicate that the verification is complete
