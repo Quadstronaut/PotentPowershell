@@ -7,7 +7,7 @@ if (Test-Path $edgePath) {
     try {
         Start-Process -FilePath $edgePath -ArgumentList $url -ErrorAction Stop
         # Wait for 60 seconds and terminate Edge
-        Start-Sleep -Seconds 30
+        Start-Sleep -Seconds 60
         Stop-Process -Name 'msedge' -ErrorAction Stop
     } catch {
         Exit 1
