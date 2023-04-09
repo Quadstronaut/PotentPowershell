@@ -1,3 +1,17 @@
+<#
+.SYNOPSIS
+This script moves the Windows taskbar to the monitor 2, right side, and vertical orientation.
+
+.DESCRIPTION
+This script uses the Windows API to move the taskbar to the specified monitor, side, and orientation.
+
+.EXAMPLE
+.\placeTaskbar.ps1
+This command moves the taskbar to the right side of the second monitor, and sets it to be vertical.
+
+.NOTES
+This script requires Windows 10 or later, and should be run with administrator privileges.
+#>
 # Define constants
 $SPI_SETWORKAREA = 0x002F
 $ABM_SETPOS = 3
@@ -34,4 +48,4 @@ $appBarData.rc.Bottom = $taskbarY + $taskbarHeight
 [User32]::SHAppBarMessage($ABM_SETPOS, [ref]$appBarData)
 
 # Restart explorer.exe process to apply changes
-Stop-Process -Name explorer
+Stop-Process -Name explorer -ErrorAction SilentlyContinue
