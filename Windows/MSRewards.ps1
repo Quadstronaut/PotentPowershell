@@ -7,9 +7,20 @@ if (-not (Test-Path $edgePath)) {
     Exit 1
 }
 
-# Launch Edge with the specified URL
+# Launch Edge with the specified URL in desktop mode
 try {
     Start-Process -FilePath $edgePath -ArgumentList $url -PassThru -ErrorAction Stop
+    # Wait for 60 seconds and terminate Edge
+    Start-Sleep -Seconds 30
+    Stop-Process -Name msedge -ErrorAction Stop
+} catch {
+    Write-Error "Failed to launch Microsoft Edge: $_"
+    Exit 1
+}
+
+# Launch Edge with the specified URL in mobile emulation mode
+try {
+    Start-Process -FilePath $edgePath -ArgumentList "--emulate-mobile", $url -PassThru -ErrorAction Stop
     # Wait for 60 seconds and terminate Edge
     Start-Sleep -Seconds 30
     Stop-Process -Name msedge -ErrorAction Stop
