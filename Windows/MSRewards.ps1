@@ -11,10 +11,8 @@ if (-not (Test-Path $edgePath)) {
 try {
     $edgeProcess = Start-Process -FilePath $edgePath -ArgumentList $url -PassThru -ErrorAction Stop
     # Wait for 60 seconds and terminate Edge
-    Start-Sleep -Seconds 60
-    if (-not $edgeProcess.HasExited) {
-        $edgeProcess.Kill()
-    }
+    Start-Sleep -Seconds 30
+    Stop-Process -Id $edgeProcess.Id -ErrorAction Stop
 } catch {
     Write-Error "Failed to launch Microsoft Edge: $_"
     Exit 1
