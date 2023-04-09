@@ -1,5 +1,5 @@
 $edgePath = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
-$url = 'https://alfilatov.com/MSEdgeSearchClicker/'
+$url = 'https://greybax.github.io/MSEdgeSearchClicker'
 
 # Check if Edge exists at the specified path
 if (-not (Test-Path $edgePath)) {
