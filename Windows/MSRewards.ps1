@@ -9,7 +9,7 @@ if (-not (Test-Path $edgePath)) {
 
 # Launch Edge with the specified URL in desktop mode
 try {
-    Start-Process -FilePath $edgePath -ArgumentList $url -PassThru -ErrorAction Stop
+    Start-Process -FilePath $edgePath -ArgumentList $url -ErrorAction Stop
     # Wait for 60 seconds and terminate Edge
     Start-Sleep -Seconds 30
     Stop-Process -Name msedge -ErrorAction Stop
@@ -20,7 +20,7 @@ try {
 
 # Launch Edge with the specified URL in mobile emulation mode
 try {
-    Start-Process -FilePath $edgePath -ArgumentList "--emulate-mobile", $url -PassThru -ErrorAction Stop
+    Start-Process -FilePath $edgePath -ArgumentList "--emulate-mobile", $url -ErrorAction Stop
     # Wait for 60 seconds and terminate Edge
     Start-Sleep -Seconds 30
     Stop-Process -Name msedge -ErrorAction Stop
