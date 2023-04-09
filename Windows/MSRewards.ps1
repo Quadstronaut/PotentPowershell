@@ -12,7 +12,7 @@ try {
     Start-Process -FilePath $edgePath -ArgumentList $url -PassThru -ErrorAction Stop
     # Wait for 60 seconds and terminate Edge
     Start-Sleep -Seconds 30
-    Stop-Process -Name msedge -ErrorAction SilentlyContinue
+    Stop-Process -Name msedge -ErrorAction Stop
 } catch {
     Write-Error "Failed to launch Microsoft Edge: $_"
     Exit 1
