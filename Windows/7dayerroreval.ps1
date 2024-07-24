@@ -1,40 +1,55 @@
 <#
 .SYNOPSIS
-  Evaluates the Windows event logs for errors over the past 7 days.
+    Analyzes Windows event logs for errors over the past 7 days.
 
 .DESCRIPTION
-  This script evaluates the Windows event logs for errors over the past 7 days. The script searches for error events in the Application and System logs, and displays a report of any errors found. The report includes the event ID, source, and message for each error event.
+    This script scans the Windows Application and System logs for error events within the past 7 days. It identifies sources that generate a significant number of errors and provides a summary report.
 
 .PARAMETER None
-  This script does not take any parameters.
+    This script does not require any parameters.
 
 .EXAMPLE
-  PS> .\7dayerroreval.ps1
-  Evaluates the Windows event logs for errors over the past 7 days.
+    PS> .\7dayerroreval.ps1
+    Analyzes Windows event logs for errors over the past 7 days.
 
 .NOTES
-  This script evaluates the Windows event logs for errors over the past 7 days. The script searches for error events in the Application and System logs. If any errors are found, the script displays a report of the error events, including the event ID, source, and message. This script is for informational purposes only and should not be used to diagnose or fix issues.
+    Author: [Your Name]
+    Date: July 24, 2024
+    Purpose: Identifies potential issues based on error frequency in event logs.
+    Disclaimer: This script is informational and does not diagnose or fix problems.
 #>
 
-# Set the time range to search for logs
+# Set time range (7 days)
 $StartTime = (Get-Date).AddDays(-7)
 $EndTime = Get-Date
 
-# Search for error events in the Windows event logs
-$Events = Get-WinEvent -FilterHashtable @{LogName = 'Application', 'System'; Level = 2; StartTime = $StartTime; EndTime = $EndTime }
+# Get error events (Level 2)
+$Events = Get-WinEvent -FilterHashtable @{
+    LogName = 'Application', 'System'
+    Level = 2 
+    StartTime = $StartTime
+    EndTime = $EndTime 
+}
 
-# Group the events by source and count the occurrences
-$EventGroups = $Events | Group-Object -Property Source
+# Group events by source and count
+$EventGroups = $Events | Group-Object Source
 
-# Loop through each event source
+# Error threshold (adjust as needed)
+$ErrorThreshold = 10
+
+# Process each source group
 foreach ($Group in $EventGroups) {
-  # Count the number of events in this group
-  $EventCount = $Group.Count
-    
-  # If there are more than 10 events in this group, it may be considered an unusual problem
-  if ($EventCount -gt 10) {
-    Write-Host "The following events from source $($Group.Name) occurred $($EventCount) times in the past 7 days:"
-    # Display the 10 most recent events from this group
-    $Group.Group | Select-Object -First 10 | Format-List | Out-String | Write-Host
-  }
+    $EventCount = $Group.Count
+
+    # Check if error count exceeds threshold
+    if ($EventCount -gt $ErrorThreshold) {
+        Write-Warning "The source '$($Group.Name)' generated $($EventCount) errors in the past 7 days:"
+
+        # Display summary of error events
+        $Group.Group | Select-Object -First 10 | Format-Table -AutoSize | Out-String | Write-Host
+    }
+}
+
+if (-not $EventGroups) { 
+    Write-Host "No errors found in the Application or System logs within the past 7 days."
 }
