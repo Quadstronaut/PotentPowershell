@@ -1,21 +1,3 @@
-<#
-.SYNOPSIS
-  Elevates the current PowerShell session to administrator privileges.
-
-.DESCRIPTION
-  This script elevates the current PowerShell session to administrator privileges. The script prompts the user for the administrator password and then uses the Start-Process cmdlet to start a new instance of PowerShell with elevated privileges. The new instance of PowerShell runs with administrator privileges, allowing the user to perform administrative tasks that require elevated privileges.
-
-.PARAMETER None
-  This script does not take any parameters.
-
-.EXAMPLE
-  PS> .\powershell_force_admin.ps1
-  Elevates the current PowerShell session to administrator privileges.
-
-.NOTES
-  This script elevates the current PowerShell session to administrator privileges. The script prompts the user for the administrator password and then uses the Start-Process cmdlet to start a new instance of PowerShell with elevated privileges. The new instance of PowerShell runs with administrator privileges, allowing the user to perform administrative tasks that require elevated privileges. This script should be used with caution and only when necessary, as running PowerShell with elevated privileges can potentially cause system damage or security risks.
-#>
-
 # Check if the script is being run with administrative privileges
 $isAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 

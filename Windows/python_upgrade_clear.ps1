@@ -1,21 +1,3 @@
-<#
-.SYNOPSIS
-  Upgrades and removes old versions of Python, and clears out any virtual environments.
-
-.DESCRIPTION
-  This script checks for installed versions of Python and removes any versions older than the latest version. The script then checks for virtual environments and clears them out, prompting the user for confirmation before proceeding. The script also checks for pip and upgrades it if it is found. The script uses Chocolatey to perform the upgrades and installations, so Chocolatey must be installed for the script to work correctly.
-
-.PARAMETER None
-  This script does not take any parameters.
-
-.EXAMPLE
-  PS> .\python_upgrade_clear.ps1
-  Upgrades and removes old versions of Python, and clears out any virtual environments.
-
-.NOTES
-  This script checks for installed versions of Python and removes any versions older than the latest version. The script then checks for virtual environments and clears them out, prompting the user for confirmation before proceeding. The script also checks for pip and upgrades it if it is found. The script uses Chocolatey to perform the upgrades and installations, so Chocolatey must be installed for the script to work correctly. This script should be used with caution, as it modifies system configurations and can potentially cause issues if used improperly.
-#>
-
 # Check if the script is running in administrative mode
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host 'This script requires administrative privileges. Please run the script as an administrator and try again.'

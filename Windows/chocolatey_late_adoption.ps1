@@ -1,21 +1,3 @@
-<#
-.SYNOPSIS
-  Searches for installed software and installs any matching packages using Chocolatey.
-
-.DESCRIPTION
-  This script searches for installed software on the local machine and checks if any of the programs are also available as Chocolatey packages. If matching packages are found, the script installs Chocolatey (if it is not already installed) and configures it to be able to upgrade the installed software. The script then upgrades the software packages using Chocolatey.
-
-.PARAMETER None
-  This script does not take any parameters.
-
-.EXAMPLE
-  PS> .\software_upgrade.ps1
-  Searches for installed software and upgrades matching packages using Chocolatey.
-
-.NOTES
-  This script requires PowerShell version 5.1 or higher, and requires administrative privileges to run. The script searches for installed software by looking for executable files in the Program Files and Program Files (x86) directories. If matching software packages are found in the Chocolatey repository, the script installs Chocolatey (if it is not already installed) and configures it to be able to upgrade the installed software. The script then upgrades the software packages using Chocolatey.
-#>
-
 # Check if the script is running with administrative privileges
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
   Write-Host 'This script must be run with administrative privileges.'
