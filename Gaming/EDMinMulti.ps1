@@ -1,7 +1,10 @@
 ### USER CONFIG ###
 
-$Accounts = @("Duvrazh", "Bistronaut", "Tristronaut", "Quadstronaut")
-$Sandboxes = @("CMDR Duvrazh", "CMDR Bistronaut", "CMDR Tristronaut", "CMDR Quadstronaut")
+#$Accounts = @("Duvrazh", "Bistronaut", "Tristronaut", "Quadstronaut")
+#$Sandboxes = @("CMDR Duvrazh", "CMDR Bistronaut", "CMDR Tristronaut", "CMDR Quadstronaut")
+$Accounts = @("Duvrazh")
+$Sandboxes = @("CMDR Duvrazh")
+
 
 ### END CONFIG ###
 
@@ -35,7 +38,8 @@ $PossibleSandboxiePaths = @(
     "$($env:USERPROFILE)\scoop\apps\sandboxie-plus-np\current\Start.exe",
     "$(Join-Path $env:ProgramData 'chocolatey\bin\Start.exe')",
     "$($env:LOCALAPPDATA)\Programs\Sandboxie\Start.exe",
-    "$(Join-Path $env:ProgramFiles 'Sandboxie-Plus')\Start.exe"
+    "$(Join-Path $env:ProgramFiles 'Sandboxie-Plus')\Start.exe",
+    "$(Join-Path $env:ProgramFiles`(x86`) 'Sandboxie-Plus\Start.exe')"
 )
 
 # Test for Sandboxie
@@ -59,8 +63,9 @@ else {
         # Prefer Odyssey over Horizons
         $OdysseyCheckPath = Split-Path $GamePath -Parent
         $OdysseyCheckPath = Join-Path $OdysseyCheckPath "Products\elite-dangerous-odyssey-64"
-        $Arguments = "/frontier $($AccountName) /autorun /autoquit /ed$(if (Test-Path -Path $OdysseyCheckPath -PathType Container) {'o'} else {'h'})"
-        try { Start-Process -FilePath $SandboxiePath -ArgumentList "/box:`"$SandboxName`" `"$GamePath`" $($Arguments)" -ErrorAction Stop }
+        $SteamArguments = "/frontier $($AccountName) /autorun /autoquit /ed$(if (Test-Path -Path $OdysseyCheckPath -PathType Container) {'o'} else {'h'})"
+        $SandboxieArguments = "/box:`"$SandboxName`" `"$GamePath`" $($SteamArguments)"
+        try { Start-Process -FilePath $SandboxiePath -ArgumentList $SandboxieArguments }
         catch { Write-Host "Error starting process: $($_.Exception.Message)" -ForegroundColor Red }
     }
 }
