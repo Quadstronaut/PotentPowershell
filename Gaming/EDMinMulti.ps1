@@ -35,8 +35,7 @@ $PossibleSandboxiePaths = @(
     "$($env:USERPROFILE)\scoop\apps\sandboxie-plus-np\current\Start.exe",
     "$(Join-Path $env:ProgramData 'chocolatey\bin\Start.exe')",
     "$($env:LOCALAPPDATA)\Programs\Sandboxie\Start.exe",
-    "$(Join-Path $env:ProgramFiles 'Sandboxie-Plus')\Start.exe",
-    "$(Join-Path $env:ProgramFiles(x86) 'Sandboxie-Plus')\Start.exe"
+    "$(Join-Path $env:ProgramFiles 'Sandboxie-Plus')\Start.exe"
 )
 
 # Test for Sandboxie
