@@ -1,10 +1,7 @@
 ### USER CONFIG ###
 
-#$Accounts = @("Duvrazh", "Bistronaut", "Tristronaut", "Quadstronaut")
-#$Sandboxes = @("CMDR Duvrazh", "CMDR Bistronaut", "CMDR Tristronaut", "CMDR Quadstronaut")
-$Accounts = @("Duvrazh")
-$Sandboxes = @("CMDR Duvrazh")
-
+$Accounts = @("Unistronaut", "Bistronaut", "Tristronaut", "Quadstronaut") # These are your in-game CMDR names
+$Sandboxes = @("CMDR_Unistronaut", "CMDR_Bistronaut", "CMDR_Tristronaut", "CMDR_Quadstronaut") # Sandboxie treats spaces as underscores in sandbox names
 
 ### END CONFIG ###
 
@@ -64,8 +61,11 @@ else {
         $OdysseyCheckPath = Split-Path $GamePath -Parent
         $OdysseyCheckPath = Join-Path $OdysseyCheckPath "Products\elite-dangerous-odyssey-64"
         $SteamArguments = "/frontier $($AccountName) /autorun /autoquit /ed$(if (Test-Path -Path $OdysseyCheckPath -PathType Container) {'o'} else {'h'})"
-        $SandboxieArguments = "/box:`"$SandboxName`" `"$GamePath`" $($SteamArguments)"
-        try { Start-Process -FilePath $SandboxiePath -ArgumentList $SandboxieArguments }
-        catch { Write-Host "Error starting process: $($_.Exception.Message)" -ForegroundColor Red }
+        $CommandLine = "$SandboxiePath /box:`"$SandboxName`" `"$GamePath`" $($SteamArguments)"
+        Write-Host "Executing: $CommandLine" -ForegroundColor Yellow
+        try {
+            Invoke-Expression -Verbose -Debug $CommandLine
+        }
+        catch { Write-Host "Error executing command: $($_.Exception.Message) - $($_.Exception.InnerException.Message)" -ForegroundColor Red }
     }
 }
