@@ -64,7 +64,7 @@ else {
         $CommandLine = "$SandboxiePath /box:`"$SandboxName`" `"$GamePath`" $($SteamArguments)"
         Write-Host "Executing: $CommandLine" -ForegroundColor Yellow
         try {
-            Invoke-Expression -Verbose -Debug $CommandLine
+            Invoke-Expression $CommandLine
         }
         catch { Write-Host "Error executing command: $($_.Exception.Message) - $($_.Exception.InnerException.Message)" -ForegroundColor Red }
     }
