@@ -5,6 +5,7 @@ $Sandboxes = @("CMDR_Unistronaut", "CMDR_Bistronaut", "CMDR_Tristronaut", "CMDR_
 
 ### END CONFIG ###
 
+Get-Process *steam* | Stop-Process -Force
 $DefaultGamePath = "C:\Program Files (x86)\Steam\steamapps\common\Elite Dangerous\MinEdLauncher.exe"
 if (Test-Path -Path $DefaultGamePath -PathType Leaf) {
     $GamePath = $DefaultGamePath
@@ -44,28 +45,31 @@ $SandboxiePath = $null
 foreach ($Path in $PossibleSandboxiePaths) {
     if (Test-Path -Path $Path -PathType Leaf) { $SandboxiePath = $Path; break }
 }
-if (-not $SandboxiePath) {
-    Write-Host "Start.exe not found in any of the following locations:" -ForegroundColor Red
-    foreach ($Path in $PossibleSandboxiePaths) {
-        Write-Host "$Path" -ForegroundColor Red
-    }
-    Write-Host "Please ensure Sandboxie Plus is installed." -ForegroundColor Red
-}
-else {
-    # Iterate the sandboxes
-    for ($i = 0; $i -lt $Sandboxes.Count; $i++) {
-        $SandboxName = $Sandboxes[$i]
-        $AccountName = $Accounts[$i]
-
-        # Prefer Odyssey over Horizons
-        $OdysseyCheckPath = Split-Path $GamePath -Parent
-        $OdysseyCheckPath = Join-Path $OdysseyCheckPath "Products\elite-dangerous-odyssey-64"
-        $SteamArguments = "/frontier $($AccountName) /autorun /autoquit /ed$(if (Test-Path -Path $OdysseyCheckPath -PathType Container) {'o'} else {'h'})"
-        $CommandLine = "$SandboxiePath /box:`"$SandboxName`" `"$GamePath`" $($SteamArguments)"
-        Write-Host "Executing: $CommandLine" -ForegroundColor Yellow
-        try {
-            Invoke-Expression $CommandLine
+try {
+    if (-not $SandboxiePath) {
+        Write-Host "Start.exe not found in any of the following locations:" -ForegroundColor Red
+        foreach ($Path in $PossibleSandboxiePaths) {
+            Write-Host "$Path" -ForegroundColor Red
         }
-        catch { Write-Host "Error executing command: $($_.Exception.Message) - $($_.Exception.InnerException.Message)" -ForegroundColor Red }
+        Write-Host "Please ensure Sandboxie Plus is installed." -ForegroundColor Red
+    }
+    else {
+        # Iterate the sandboxes
+        for ($i = 0; $i -lt $Sandboxes.Count; $i++) {
+            $SandboxName = $Sandboxes[$i]
+            $AccountName = $Accounts[$i]
+
+            # Prefer Odyssey over Horizons
+            $OdysseyCheckPath = Split-Path $GamePath -Parent
+            $OdysseyCheckPath = Join-Path $OdysseyCheckPath "Products\elite-dangerous-odyssey-64"
+            $SteamArguments = "/frontier $($AccountName) /autorun /autoquit /ed$(if (Test-Path -Path $OdysseyCheckPath -PathType Container) {'o'} else {'h'})"
+            $CommandLine = "$SandboxiePath /box:`"$SandboxName`" `"$GamePath`" $($SteamArguments)"
+            Write-Host "Executing: $CommandLine" -ForegroundColor Yellow
+            try {
+                Invoke-Expression $CommandLine
+            }
+            catch { Write-Host "Error executing command: $($_.Exception.Message) - $($_.Exception.InnerException.Message)" -ForegroundColor Red }
+        }
     }
 }
+finally { exit }
