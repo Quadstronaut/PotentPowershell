@@ -24,3 +24,5 @@ dism /online /cleanup-image /analyzecomponentstore
 
 # Lists all installed packages and their states.
 dism /online /get-packages
+
+#TODO: This needs to be converted to a ps1
