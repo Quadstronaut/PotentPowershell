@@ -1,1 +1,0 @@
-& bcdedit /deletevalue { current } safeboot
