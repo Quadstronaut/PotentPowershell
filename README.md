@@ -95,57 +95,57 @@ The `Learn/` files are annotated transcriptions of the [LearnXInYMinutes PowerSh
 ## Scripts/ — Quick Reference
 
 ### Windows Maintenance
-| Script | What it does |
-|--------|-------------|
-| `Invoke-SystemUpgrade.ps1` | SFC + DISM (background) + Chocolatey upgrade + pip upgrade + Windows Update |
-| `Invoke-DiskCheck.ps1` | Runs `chkdsk C: /f /r` (auto-elevates) |
-| `Get-ErrorReport.ps1` | 7-day Application/System event log error summary |
-| `Invoke-SfcDism.ps1` | Reference for all SFC and DISM repair commands |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Invoke-SystemUpgrade.ps1` | Installs Chocolatey if missing, runs SFC + DISM in background, upgrades all Chocolatey packages, upgrades pip, installs Windows Updates (no forced reboot) | Yes |
+| `Invoke-DiskCheck.ps1` | Runs `chkdsk C: /f /r` (auto-elevates; on a live C: drive, check is scheduled for next reboot) | Auto-elevates |
+| `Get-ErrorReport.ps1` | Application/System event log error summary. Parameters: `-DaysBack` (default 7), `-ErrorThreshold` (default 10) | Recommended |
+| `Invoke-SfcDism.ps1` | **Reference script** — documents every SFC and DISM repair command with annotations. Not meant to be run top-to-bottom; copy individual commands as needed. | Yes (per command) |
 
 ### Package Managers
-| Script | What it does |
-|--------|-------------|
-| `Import-ChocolateyPackages.ps1` | Finds existing software with Chocolatey packages and brings it under management |
-| `Update-PythonInstallation.ps1` | Upgrades Python, removes old versions, upgrades pip, cleans venvs |
-| `Invoke-ScoopBrowser.ps1` | Interactive Scoop package browser with background installs |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Import-ChocolateyPackages.ps1` | Scans `Program Files` for executables that have matching Chocolatey packages; installs Chocolatey if missing, pins found packages, then upgrades them | Yes |
+| `Update-PythonInstallation.ps1` | Detects installed Python versions via Chocolatey or registry; upgrades to latest, removes older versions, upgrades pip, optionally deletes virtualenvwrapper-style venvs (`~\Envs`) | Yes |
+| `Invoke-ScoopBrowser.ps1` | Interactive Scoop package browser — shows info for each package and installs selected ones as background jobs | No |
 
 ### Safe Mode
-| Script | What it does |
-|--------|-------------|
-| `Enter-SafeMode.ps1` | Sets `bcdedit` safe mode flag and reboots (Safe Mode with Networking) |
-| `Exit-SafeMode.ps1` | Clears safe mode flag (run before rebooting to return to normal) |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Enter-SafeMode.ps1` | Sets `bcdedit` Safe Mode with Networking flag and immediately reboots. **Will reboot the machine.** | Yes |
+| `Exit-SafeMode.ps1` | Clears the `bcdedit` safeboot value. Does **not** reboot — restart manually when ready. | Yes |
 
 ### Utilities
-| Script | What it does |
-|--------|-------------|
-| `Get-OpenWindows.ps1` | Lists all processes with visible windows + their titles |
-| `Set-AdminAutoElevate.ps1` | Adds auto-elevation to PowerShell profile |
-| `Remove-Silverlight.ps1` | Fully removes Microsoft Silverlight (EOL Oct 2021) |
-| `Get-ScreenGeometry.ps1` | Reports bounds + working area for all connected monitors |
-| `Sync-Directories.ps1` | Robocopy-based directory sync with 64-thread parallel copy |
-| `Start-MSRewards.ps1` | Opens Edge to search clicker for Microsoft Rewards points |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Get-OpenWindows.ps1` | Lists all processes with visible windows and their titles | No |
+| `Set-AdminAutoElevate.ps1` | Sets execution policy to `Unrestricted` for current user, creates the PowerShell profile if absent, appends an auto-elevation snippet. **Note:** `Unrestricted` is broader than `RemoteSigned`. | Auto-elevates |
+| `Remove-Silverlight.ps1` | Silently uninstalls Silverlight, removes registry entries, deletes remaining files from disk and AppData. Safe no-op if Silverlight is not installed. | Recommended |
+| `Get-ScreenGeometry.ps1` | Reports full bounds and working area (excluding taskbar) for all connected monitors | No |
+| `Sync-Directories.ps1` | Robocopy-based directory sync (`/E /XC /NP /ETA /MT:64`). Parameters: `-Source`, `-Destination` (both mandatory) | No |
+| `Start-MSRewards.ps1` | Opens Edge to the MS Edge Search Clicker page and closes it after a configurable wait. Parameter: `-WaitSeconds` (default 120). Hardcodes Edge path; exits with a warning if Edge is not found there. | No |
 
 ### AWS
-| Script | What it does |
-|--------|-------------|
-| `Invoke-AwsConfigure.ps1` | Interactive AWS CLI setup with credential reuse and region selection |
-| `New-AwsAccount.ps1` | Full AWS account hardening checklist (IAM, MFA, billing, CloudTrail, SSO) |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Invoke-AwsConfigure.ps1` | Interactive AWS CLI setup: checks for saved credentials, offers to reuse them, installs/upgrades `awscli` + `awstools.powershell` via Chocolatey, prompts for region selection, validates with `aws s3 ls` | Yes (for Chocolatey) |
+| `New-AwsAccount.ps1` | Guided AWS account hardening walkthrough: IAM user/group/policy, billing budget + SNS alerts, CloudTrail, admin account, SSO. **Note:** several steps are stubs (VPC/EC2 deferred to Terraform); some cmdlets (`Enable-IAMMFA`, `Test-IAMMFA`, `AWSPowerShellSSO`) may not exist in all AWS.Tools versions — verify module availability before running. | No (uses AWS APIs) |
 
 ### Gaming
-| Script | What it does |
-|--------|-------------|
-| `Start-EDMultiAccount.ps1` | Launches multiple Elite Dangerous accounts via Sandboxie |
-| `Invoke-SteamVerification.ps1` | Forces Steam to verify all installed game files |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Start-EDMultiAccount.ps1` | Launches multiple Elite Dangerous accounts simultaneously via Sandboxie Plus. **Requires editing the `$Accounts` and `$Sandboxes` arrays in the USER CONFIG section before use.** | No |
+| `Invoke-SteamVerification.ps1` | Locates Steam via registry and runs `-verify_all` on the base installation. **Known issue:** per-game verification loop searches for appmanifests inside game subdirectories, but Steam stores them as `appmanifest_<appid>.acf` in the `steamapps` root — the per-game loop will silently find nothing. Only the base install verification works reliably. | Yes (registry) |
 
 ### Fun
-| Script | What it does |
-|--------|-------------|
-| `Get-PiApproximation.ps1` | Approximates Pi via the Leibniz formula |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Get-PiApproximation.ps1` | Approximates Pi using the Leibniz formula. Parameter: `-Iterations` (default 1,000,000). Slow to converge — millions of terms for a few correct digits. | No |
 
 ### Discord
-| Script | What it does |
-|--------|-------------|
-| `Send-RichEmbed.ps1` | Posts a rich embed message to a Discord channel via webhook |
+| Script | What it does | Admin required |
+|--------|-------------|----------------|
+| `Send-RichEmbed.ps1` | Posts a rich embed to a Discord channel webhook. Parameters: `-WebhookUrl`, `-Title`, `-Description` (all mandatory); `-Color` (decimal int, default 65280 = green), `-Thumbnail` (URL), `-Author` (hashtable with `name`/`icon_url`). Color must be decimal — Discord does not accept hex strings. | No |
 
 ---
 
@@ -161,6 +161,8 @@ Get-Help .\Scripts\Windows\Utilities\Sync-Directories.ps1 -Full
 # Open a Learn file in VS Code
 code .\Learn\01-Basics\01-datatypes-and-operators.ps1
 ```
+
+For full per-script documentation, caveats, and troubleshooting, see the [GitHub wiki](https://github.com/Quadstronaut/PotentPowershell/wiki).
 
 ---
 
